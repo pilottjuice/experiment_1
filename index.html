@@ -1,30 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Input</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text File Viewer</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
+    input { padding: 10px; width: 70%; }
+    button { padding: 10px 16px; cursor: pointer; }
+    #message { margin-top: 12px; }
+    #fileContent { white-space: pre-wrap; background: #f4f4f4; padding: 16px; border-radius: 8px; min-height: 80px; }
+  </style>
 </head>
 <body>
-    <h1>Add a new line</h1>
+  <h1>Add a new line</h1>
 
-    <input type="text" id="userInput" placeholder="Type something">
-    <button onclick="submitText()">Submit</button>
+  <input type="text" id="userInput" placeholder="Type something">
+  <button onclick="submitText()">Submit</button>
+  <p id="message"></p>
 
-    <p id="message"></p>
+  <h2>Current data.txt</h2>
+  <pre id="fileContent">Loading...</pre>
 
-    <script>
-        function submitText() {
-            const text = document.getElementById("userInput").value;
-
-            if (text.trim() === "") {
-                document.getElementById("message").innerText = "Please enter something.";
-                return;
-            }
-
-            document.getElementById("message").innerText = "You entered: " + text;
-            document.getElementById("userInput").value = "";
+  <script>
+    async function loadFile() {
+      try {
+        const response = await fetch('data.txt?cache=' + Date.now());
+        if (!response.ok) {
+          throw new Error('Could not load data.txt');
         }
-    </script>
+        const text = await response.text();
+        document.getElementById('fileContent').textContent = text;
+      } catch (error) {
+        document.getElementById('fileContent').textContent = error.message;
+      }
+    }
+
+    function submitText() {
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+
+      if (!text) {
+        document.getElementById('message').textContent = 'Please enter something.';
+        return;
+      }
+
+      document.getElementById('message').textContent =
+        'You entered: ' + text + ' (not saved to data.txt yet)';
+      input.value = '';
+    }
+
+    loadFile();
+  </script>
 </body>
 </html>
