@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TXT File Updater</title>
+</head>
+
+<body>
+
+    <h1>TXT File Updater</h1>
+
+    <form action="/update" method="POST">
+
+        <input
+            type="text"
+            name="user_text"
+            placeholder="Enter something"
+            required
+        >
+
+        <button type="submit">Update TXT File</button>
+
+    </form>
+
+    <form action="/clear" method="POST">
+        <button type="submit">Clear</button>
+    </form>
+
+    {% if status %}
+        <p>{{ status }}</p>
+    {% endif %}
+
+</body>
+
+</html>
